@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:games_community/bubble_trouble/bubble_trouble.dart';
+import 'package:games_community/home_screen.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -8,7 +8,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Bubbletrouble(),
+      home: HomeScreen(),
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:games_community/XO%20Game/xo_screen.dart';
+import 'package:games_community/bubble_trouble/bubble_trouble.dart';
 import 'package:games_community/colors/colors.dart';
 import 'package:particles_flutter/particles_flutter.dart';
 
@@ -44,7 +45,6 @@ class HomeScreen extends StatelessWidget {
               child: Column(
                 children: [
                   SizedBox(
-                    width: 200,
                     height: 50,
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -66,6 +66,34 @@ class HomeScreen extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => XOGame(),
+                              ));
+                        }),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                    height: 50,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                10.0), // Adjust the value as per your requirement
+                          ),
+                        ),
+                        child: Text(
+                          "Bubble Trouble",
+                          style: TextStyle(
+                              color: AppColors.blue,
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const BubbleTrouble(),
                               ));
                         }),
                   ),

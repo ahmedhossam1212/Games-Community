@@ -6,41 +6,101 @@ import 'package:games_community/bubble_trouble/widgets/control_button.dart';
 import 'package:games_community/bubble_trouble/widgets/my_ball.dart';
 import 'package:games_community/colors/colors.dart';
 
-class Bubbletrouble extends StatefulWidget {
-  const Bubbletrouble({super.key});
+class BubbleTrouble extends StatefulWidget {
+  const BubbleTrouble({super.key});
 
   @override
-  State<Bubbletrouble> createState() => _BubbletroubleState();
+  State<BubbleTrouble> createState() => _BubbleTroubleState();
 }
 
 // ignore: camel_case_types, constant_identifier_names
-enum direction { LEFT, RIGHT }
+enum directionX { LEFT, RIGHT }
 
-class _BubbletroubleState extends State<Bubbletrouble> {
+// ignore: camel_case_types, constant_identifier_names
+
+class _BubbleTroubleState extends State<BubbleTrouble> {
   double ballX = 0;
   double ballY = 0;
   double x = 0;
   double y = 1;
-  var ballDirection = direction.LEFT;
+  var ballDirectionX = directionX.LEFT;
+
+  bool playerDies() {
+    if ((ballX - x).abs() < 0.05 && ballY > 0.95) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  void _showDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: AppColors.grey,
+          title: const Text(
+            "You die Bro .",
+            style: TextStyle(fontSize: 20),
+          ),
+        );
+      },
+    );
+  }
+
+  double hieghtToCoordinate(double hieght) {
+    double totalHieght = MediaQuery.of(context).size.height * 3 / 4;
+    double missleY = 1 - 2 * hieght / totalHieght;
+    return missleY;
+  }
 
   void startGame() {
-    Timer.periodic(Duration(milliseconds: 20), (timer) {
-      if (ballX - 0.02 < -1) {
-        ballDirection = direction.RIGHT;
-      } else if (ballX + 0.02 > 1) {
-        ballDirection = direction.LEFT;
+    ballX = 0;
+    ballY = 0;
+    double time = 0;
+    double height = 0;
+    double velocity = 50;
+    Timer.periodic(const Duration(milliseconds: 25), (timer) {
+      height = -5 * time * time + velocity * time;
+
+      if (height < 0) {
+        time = 0;
       }
 
-      if (ballDirection == direction.LEFT) {
+      setState(() {
+        ballY = hieghtToCoordinate(height);
+      });
+      time += 0.1;
+      if (ballX - 0.02 < -1) {
+        ballDirectionX = directionX.RIGHT;
+      } else if (ballX + 0.02 > 1) {
+        ballDirectionX = directionX.LEFT;
+      }
+
+      if (ballDirectionX == directionX.LEFT) {
         setState(() {
           ballX -= 0.02;
         });
-      } else if (ballDirection == direction.RIGHT) {
-        setState(() {
-          ballX += 0.02;
-        });
+      } else if (ballDirectionX == directionX.RIGHT) {
+        setState(
+          () {
+            ballX += 0.02;
+          },
+        );
+      }
+
+      if (playerDies()) {
+        timer.cancel;
+        _showDialog();
+        dispose();
       }
     });
+  }
+
+  void upAxis() {
+    if (y > -1) {
+      y -= 0.05;
+    }
   }
 
   void axisPlus() {
@@ -58,6 +118,17 @@ class _BubbletroubleState extends State<Bubbletrouble> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text("Bubble Trouble"),
+        backgroundColor: AppColors.pink,
+        elevation: 0.0,
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.arrow_back)),
+      ),
       body: Column(
         children: [
           Expanded(
@@ -70,10 +141,12 @@ class _BubbletroubleState extends State<Bubbletrouble> {
                   Align(
                     alignment: Alignment(x, y),
                     child: Container(
-                      width: 40,
-                      height: 40,
+                      width: 60,
+                      height: 60,
                       decoration: BoxDecoration(
-                          color: AppColors.blue, shape: BoxShape.rectangle),
+                          borderRadius: BorderRadius.circular(10),
+                          color: AppColors.blue,
+                          shape: BoxShape.rectangle),
                     ),
                   ),
                   MyBall(ballX: ballX, ballY: ballY),
@@ -99,6 +172,9 @@ class _BubbletroubleState extends State<Bubbletrouble> {
                   BubbleControlButton(
                     function: () {
                       debugPrint("up");
+                      setState(() {
+                        upAxis();
+                      });
                     },
                     icon: Icons.keyboard_arrow_up,
                   ),
