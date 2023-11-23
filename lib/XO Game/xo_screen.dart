@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:games_community/colors.dart';
+import 'package:games_community/colors/colors.dart';
 import 'package:particles_flutter/particles_flutter.dart';
 
 class XOGame extends StatefulWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:games_community/XO%20Game/xo_screen.dart';
-import 'package:games_community/colors.dart';
+import 'package:games_community/colors/colors.dart';
 import 'package:particles_flutter/particles_flutter.dart';
 
 class HomeScreen extends StatelessWidget {
